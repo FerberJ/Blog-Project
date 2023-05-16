@@ -17,17 +17,26 @@ public class BlogServiceTest {
     @Test
     void listingAndAddingBlogs() {
         // Arrange
+
         Blog blog = new Blog("Testing Blog", "This is my testing blog");
+
         int blogsBefore;
         List<Blog> blogs;
 
         // Act
         blogsBefore = blogService.getBlogs().size();
+
         blogService.addBlog(blog);
+
         blogs = blogService.getBlogs();
 
         // Assert
         assertEquals(blogsBefore + 1, blogs.size());
-        assertEquals(blog, blogs.get(blogs.size() - 1));
+        
+        assertEquals(blog.getId(), blogs.get(0).getId());
+        
+        
+        
+        //assertEquals(blog.compareTo(blogs.get(blogs.size() - 1)), 0);
     }
 }
