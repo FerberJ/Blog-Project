@@ -2,8 +2,10 @@ package ch.hftm;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import io.quarkus.test.junit.QuarkusTest;
@@ -14,6 +16,7 @@ public class BlogServiceTest {
     @Inject
     BlogService blogService;
 
+    
     @Test
     void listingAndAddingBlogs() {
         // Arrange
@@ -22,7 +25,7 @@ public class BlogServiceTest {
 
         int blogsBefore;
         List<Blog> blogs;
-
+       
         // Act
         blogsBefore = blogService.getBlogs().size();
 
@@ -32,11 +35,23 @@ public class BlogServiceTest {
 
         // Assert
         assertEquals(blogsBefore + 1, blogs.size());
-        
-        assertEquals(blog.getId(), blogs.get(0).getId());
-        
-        
-        
-        //assertEquals(blog.compareTo(blogs.get(blogs.size() - 1)), 0);
+        assertEquals(blog.getId(), blogs.get(blogs.size()-1).getId());      
+    }
+
+    @Test
+    void addCommentsToBlog() {
+        Blog blog = new Blog("First Blog", "This is my testing blog");
+        List<Blog> blogs;
+        List<Comment> comments = new ArrayList<>();
+        comments.add(new Comment("First Comment"));
+        comments.add(new Comment("Second Comment"));
+
+        blog.setComments(comments);
+
+        blogService.addBlog(blog);
+        blogs = blogService.getBlogs();
+
+        assertEquals("First Comment", blogs.get(blogs.size()-1).getComments().get(0).getComment());
+        assertEquals(comments.size(), blogs.get(blogs.size()-1).getComments().size());
     }
 }

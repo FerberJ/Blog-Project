@@ -27,4 +27,10 @@ public class BlogService {
         logger.info("Adding blog " + blog.getTitle());
         blogRepository.persist(blog);
     }
+
+    @Transactional
+    public void removeBlog(Blog blog) {
+        logger.info("Removing blog " + blog.getTitle());
+        blogRepository.delete(blog);
+    }
 }
