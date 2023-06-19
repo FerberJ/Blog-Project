@@ -25,7 +25,7 @@ public class BlogService {
 
     public Blog getBlog(long id) {
         var blog = blogRepository.findById(id);
-        logger.info("Returning Blog" + blog.getTitle());
+        logger.info("Returning Blog " + blog.getTitle());
         return blog;
     } 
 
