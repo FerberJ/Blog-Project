@@ -23,6 +23,12 @@ public class BlogService {
         return blogs;
     }
 
+    public Blog getBlog(long id) {
+        var blog = blogRepository.findById(id);
+        logger.info("Returning Blog " + blog.getTitle());
+        return blog;
+    } 
+
     @Transactional
     public void addBlog(Blog blog) {
         logger.info("Adding blog " + blog.getTitle());
