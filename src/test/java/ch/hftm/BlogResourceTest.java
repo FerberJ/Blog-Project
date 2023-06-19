@@ -12,9 +12,9 @@ public class BlogResourceTest {
     @Test
     public void testBlogEndpoint() {
         given()
-            .when().get("/blog")
+            .when().get("/blogs")
             .then()
                 .statusCode(200)
-                .body(is("Willkommen auf meinen Blog!"));
+                .body("content[0]", is("This is my testing blog"));
     }
 }
