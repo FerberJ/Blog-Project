@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.hftm.control.BlogService;
 import ch.hftm.entity.Blog;
-import ch.hftm.entity.Comment;
+import ch.hftm.entity.BlogComment;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 
@@ -44,9 +44,9 @@ public class BlogServiceTest {
     void addCommentsToBlog() {
         Blog blog = new Blog("First Blog", "This is my testing blog");
         List<Blog> blogs;
-        List<Comment> comments = new ArrayList<>();
-        comments.add(new Comment("First Comment"));
-        comments.add(new Comment("Second Comment"));
+        List<BlogComment> comments = new ArrayList<>();
+        comments.add(new BlogComment("First Comment"));
+        comments.add(new BlogComment("Second Comment"));
 
         blog.setComments(comments);
 
