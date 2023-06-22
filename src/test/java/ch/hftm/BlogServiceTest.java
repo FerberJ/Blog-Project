@@ -14,7 +14,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 
 @QuarkusTest
-public class BlogServiceTest {
+class BlogServiceTest {
     @Inject
     BlogService blogService;
 
