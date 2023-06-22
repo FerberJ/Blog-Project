@@ -13,12 +13,12 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table(name = "Comment")
-public class Comment {
+public class BlogComment {
     @Id @GeneratedValue
     private Long id;
     private String comment;
 
-    public Comment(String comment) {
+    public BlogComment(String comment) {
         this.comment = comment;
     }
 }

@@ -22,7 +22,7 @@ public class Blog  {
     private String content;
 
     @OneToMany(cascade = CascadeType.ALL)
-    private List<Comment> comments;
+    private List<BlogComment> comments;
 
     public Blog(String title, String content) {
         this.title = title;

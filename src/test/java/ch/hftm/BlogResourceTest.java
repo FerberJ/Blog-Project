@@ -11,12 +11,12 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
 
 @QuarkusTest
-public class BlogResourceTest {
+class BlogResourceTest {
     @Inject
     BlogService blogService;
 
     @Test
-    public void testBlogEndpoint() {
+    void testBlogEndpoint() {
         Blog blog = new Blog("Testing Blog", "This is my testing blog in BlogResourceTest");
         blogService.addBlog(blog);
 
