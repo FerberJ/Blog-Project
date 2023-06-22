@@ -1,3 +1,4 @@
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=FerberJ_Blog-Project&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=FerberJ_Blog-Project)
 # Blog-Project
 
 ## Quarkus starten
