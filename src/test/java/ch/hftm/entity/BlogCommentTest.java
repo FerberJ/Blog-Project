@@ -1,10 +1,10 @@
-package ch.hftm;
+package ch.hftm.entity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import ch.hftm.entity.BlogComment;
+
 import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
