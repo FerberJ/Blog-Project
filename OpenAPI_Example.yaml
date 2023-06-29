@@ -74,37 +74,7 @@ paths:
             application/json:
               schema:
                 type: "string"
-                
-                
-                
-                
-    put:
-      tags:
-        - 02 Blog Detail
-      operationId: "likedByMe"
-      description: ""
-      parameters:
-        - in: "path"
-          name: "id"
-          required: true
-          schema:
-            type: "integer"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: "string"
-      responses:
-        200:
-          description: ""
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Blog"
-
-
-                
-                
+            
   /blogs/{id}/likedByMe:
     put:
       tags:
