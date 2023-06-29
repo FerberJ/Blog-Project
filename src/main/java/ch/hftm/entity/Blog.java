@@ -2,8 +2,6 @@ package ch.hftm.entity;
 
 import java.util.List;
 
-import org.eclipse.microprofile.openapi.annotations.media.Schema;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
