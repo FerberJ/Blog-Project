@@ -17,7 +17,7 @@ class BlogResourceTest {
 
     @Test
     void testBlogEndpoint() {
-        Blog blog = new Blog("Testing Blog", "This is my testing blog in BlogResourceTest");
+        Blog blog = new Blog("Testing Blog", "This is my testing blog in BlogResourceTest", true);
         blogService.addBlog(blog);
 
         given()
