@@ -2,6 +2,8 @@ package ch.hftm.entity;
 
 import java.util.List;
 
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,12 +22,14 @@ public class Blog  {
     private Long id;
     private String title;
     private String content;
+    private boolean likedByMe;
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<BlogComment> comments;
 
-    public Blog(String title, String content) {
+    public Blog(String title, String content, boolean likedByMe) {
         this.title = title;
         this.content = content;
+        this.likedByMe = likedByMe;
     }
  }

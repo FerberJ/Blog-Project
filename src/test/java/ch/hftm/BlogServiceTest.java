@@ -23,7 +23,7 @@ class BlogServiceTest {
     void listingAndAddingBlogs() {
         // Arrange
 
-        Blog blog = new Blog("Testing Blog", "This is my testing blog");
+        Blog blog = new Blog("Testing Blog", "This is my testing blog", true);
 
         int blogsBefore;
         List<Blog> blogs;
@@ -42,7 +42,7 @@ class BlogServiceTest {
 
     @Test
     void addCommentsToBlog() {
-        Blog blog = new Blog("First Blog", "This is my testing blog");
+        Blog blog = new Blog("First Blog", "This is my testing blog", true);
         List<Blog> blogs;
         List<BlogComment> comments = new ArrayList<>();
         comments.add(new BlogComment("First Comment"));
@@ -55,5 +55,13 @@ class BlogServiceTest {
 
         assertEquals("First Comment", blogs.get(blogs.size()-1).getComments().get(0).getComment());
         assertEquals(comments.size(), blogs.get(blogs.size()-1).getComments().size());
+    }
+
+    @Test
+    void updateLikedByMe() {
+        Blog blog = new Blog("First Blog", "This is my testing blog", true);
+        blogService.addBlog(blog);
+        blogService.updateLikedByMe(blog);
+        assertEquals(false, blogService.getBlog(blog.getId()).get().isLikedByMe());
     }
 }

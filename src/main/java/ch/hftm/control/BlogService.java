@@ -1,6 +1,7 @@
 package ch.hftm.control;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.jboss.logging.Logger;
 
@@ -23,9 +24,15 @@ public class BlogService {
         return blogs;
     }
 
-    public Blog getBlog(long id) {
-        var blog = blogRepository.findById(id);
-        logger.info("Returning Blog " + blog.getTitle());
+    public List<Blog> getBlogs(String searchString) {
+        var blogs = blogRepository.find("title like ?1 or content like ?1", "%" + searchString + "%").list();
+        logger.info("Returning " + blogs.size() + " blogs");
+        return blogs;
+    }
+
+    public Optional<Blog> getBlog(long id) {
+        var blog = blogRepository.findByIdOptional(id);
+        //      logger.info("Returning Blog " + blog.getTitle());
         return blog;
     } 
 
@@ -39,5 +46,16 @@ public class BlogService {
     public void removeBlog(Blog blog) {
         logger.info("Removing blog " + blog.getTitle());
         blogRepository.delete(blog);
+    }
+
+    @Transactional
+    public void updateLikedByMe(Blog blog) {
+        logger.info("Updating likedByMe for blog " + blog.getTitle());
+        blogRepository.update("likedByMe = ?1 where id = ?2", !blog.isLikedByMe(), blog.getId());
+    }
+
+    public Blog updateBlog(Blog blogToUpdate) {
+        logger.info("Updating blog " + blogToUpdate.getTitle());
+        return blogRepository.getEntityManager().merge(blogToUpdate);
     }
 }
