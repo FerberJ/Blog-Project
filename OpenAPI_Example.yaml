@@ -1,0 +1,152 @@
+---
+openapi: 3.0.3
+info:
+  title: blog-backend API
+  version: "0.1"
+tags:
+- name: 01 Blog Overview
+- name: 02 Blog Detail
+paths:
+  /blogs:
+    get:
+      tags:
+      - 01 Blog Overview
+      parameters:
+      - name: search
+        in: query
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Blog'
+    post:
+      tags:
+      - 02 Blog Detail
+      description: Add new Blog-Post.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Blog'
+      responses:
+        "200":
+          description: OK
+  /blogs/{id}:
+    get:
+      tags:
+      - 02 Blog Detail
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          format: int64
+          type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Blog'
+                
+    delete:
+      tags:
+        - 02 Blog Detail
+      operationId: "blogsDelete"
+      description: ""
+      parameters:
+        - in: "path"
+          name: "id"
+          required: true
+          schema:
+            type: "integer"
+      responses:
+        200:
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: "string"
+                
+                
+                
+                
+    put:
+      tags:
+        - 02 Blog Detail
+      operationId: "likedByMe"
+      description: ""
+      parameters:
+        - in: "path"
+          name: "id"
+          required: true
+          schema:
+            type: "integer"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: "string"
+      responses:
+        200:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Blog"
+
+
+                
+                
+  /blogs/{id}/likedByMe:
+    put:
+      tags:
+      - 02 Blog Detail
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          format: int64
+          type: integer
+      responses:
+        "204":
+          description: No Content
+components:
+  schemas:
+    Blog:
+      type: object
+      properties:
+        id:
+          format: int64
+          type: integer
+        title:
+          type: string
+        content:
+          type: string
+        likedByMe:
+          type: boolean
+        comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/BlogComment'
+    BlogComment:
+      type: object
+      properties:
+        id:
+          format: int64
+          type: integer
+        comment:
+          type: string
+  securitySchemes:
+    SecurityScheme:
+      type: http
+      description: Authentication
+      scheme: basic
