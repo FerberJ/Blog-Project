@@ -12,6 +12,7 @@ import ch.hftm.control.BlogService;
 import ch.hftm.entity.Blog;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.NotFoundException;
@@ -52,7 +53,7 @@ public class BlogResource {
     @APIResponses({ @APIResponse(responseCode = "500", description = "Could not create Blog"), 
         @APIResponse(responseCode = "201", description = "Blog created")
     })
-    public Response addBlog(Blog blog) {
+    public Response addBlog(@Valid Blog blog) {
         try {
             this.blogService.addBlog(blog);
             return Response.status(201).entity(blog).build(); 
