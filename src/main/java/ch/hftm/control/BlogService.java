@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import org.jboss.logging.Logger;
 
+import ch.hftm.control.dto.BlogDto.NewBlogDto;
+import ch.hftm.control.mapper.BlogMapper;
 import ch.hftm.entity.Blog;
 import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
@@ -58,4 +60,14 @@ public class BlogService {
         logger.info("Updating blog " + blogToUpdate.getTitle());
         return blogRepository.getEntityManager().merge(blogToUpdate);
     }
+
+    @Transactional
+    public long addBlogDto(NewBlogDto blogDto) {
+        logger.info("Adding blog " + blogDto.title());
+        Blog blog = new BlogMapper().toValidBlog(blogDto);
+        blogRepository.persist(blog);
+        return blog.getId();
+    }
+
+
 }

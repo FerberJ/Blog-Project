@@ -7,6 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,6 +20,7 @@ import lombok.Setter;
 public class Blog  {
     @Id @GeneratedValue
     private Long id;
+    @NotBlank @Size(min = 3, max = 50, message = "Title must be between 3 and 50 characters long.")
     private String title;
     private String content;
     private boolean likedByMe;
