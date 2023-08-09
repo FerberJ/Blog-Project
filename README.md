@@ -95,3 +95,6 @@ Easily start your Reactive RESTful Web Services
 
 # OpenApi
 The YAML for how the OpenAPI should look like can be found under [./OpenAPI_Example.yaml](OpenAPI_Example.yaml)
+
+# Validation
+
