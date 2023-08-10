@@ -22,6 +22,5 @@ public interface BlogDto {
         @Size(min = 3, max = 50, message = "Title must be between 3 and 50 characters long.")
         private String title;
         private String content;
-        private boolean likedByMe;
     }
 }

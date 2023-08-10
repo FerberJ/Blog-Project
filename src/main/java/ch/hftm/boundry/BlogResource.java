@@ -101,10 +101,15 @@ public class BlogResource {
         return Response.created(uri).entity(blog).build();
     }
 
-    @PUT
+    @POST
     @Path("{id}/comments")
     @Tag(name = BLOG_DETAIL)
-    public Response addComment(long id, NewBlogCommentDto blogCommentDto, @Context UriInfo uriInfo) {
+    @Operation(description = "ID from Blog.")
+    @APIResponses({
+        @APIResponse(responseCode = "500", description = "Could not create Comment"),
+        @APIResponse(responseCode = "201", description = "Comment created")
+})
+    public Response addComment(long id,@Valid NewBlogCommentDto blogCommentDto, @Context UriInfo uriInfo) {
         long n_id = this.blogService.addBlogCommentDto(blogCommentDto, id);
         var uri = uriInfo.getAbsolutePathBuilder().path(Long.toString(n_id)).build();
         return Response.created(uri).build();
