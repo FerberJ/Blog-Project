@@ -113,9 +113,17 @@ Similiar with posting a comment, it will throw an error if the comment is blank.
 
 ![](/img/postCommentError.png)
 
-There are dto-classes for the blog and comment:
-
-The Validation is made there.
+There are dto-classes for the blog and comment. The Validation is made there. For example the BlogDto:
 ```java
-
+public interface BlogDto {
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public class NewBlogDto {
+        @NotBlank
+        @Size(min = 3, max = 50, message = "Title must be between 3 and 50 characters long.")
+        private String title;
+        private String content;
+    }
+}
 ``````
