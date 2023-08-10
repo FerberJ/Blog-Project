@@ -98,3 +98,24 @@ The YAML for how the OpenAPI should look like can be found under [./OpenAPI_Exam
 
 # Validation
 
+Functions of my Product:
+
+I can Read all Blogs, search the content or title for a Blog and get a Blog by its id. 
+
+![](/img/getBlogs.png) 
+![](/img/getBlogsId.png)
+
+Also I can Post and delete a Blog. If I Post, there is a Validation, so if the Title is to short, it will get an Error and in the Response body I will recive the detailed information about the error. 
+
+![](/img/postBlogsError.png)
+
+Similiar with posting a comment, it will throw an error if the comment is blank.
+
+![](/img/postCommentError.png)
+
+There are dto-classes for the blog and comment:
+
+The Validation is made there.
+```java
+
+``````
