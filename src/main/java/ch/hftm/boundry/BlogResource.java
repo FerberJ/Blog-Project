@@ -55,7 +55,8 @@ public class BlogResource {
     @Operation(description = "Add new Blog-Post.")
     @APIResponses({
             @APIResponse(responseCode = "500", description = "Could not create Blog"),
-            @APIResponse(responseCode = "201", description = "Blog created")
+            @APIResponse(responseCode = "201", description = "Blog created"),
+            @APIResponse(responseCode = "400", description = "Invalid input")
     })
     public Response addBlog(@Valid NewBlogDto blogDto, @Context UriInfo uriInfo) {
         long id = this.blogService.addBlogDto(blogDto);
@@ -107,7 +108,8 @@ public class BlogResource {
     @Operation(description = "ID from Blog.")
     @APIResponses({
         @APIResponse(responseCode = "500", description = "Could not create Comment"),
-        @APIResponse(responseCode = "201", description = "Comment created")
+        @APIResponse(responseCode = "201", description = "Comment created"),
+        @APIResponse(responseCode = "400", description = "Invalid input")
 })
     public Response addComment(long id,@Valid NewBlogCommentDto blogCommentDto, @Context UriInfo uriInfo) {
         long n_id = this.blogService.addBlogCommentDto(blogCommentDto, id);
