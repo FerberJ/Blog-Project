@@ -6,8 +6,11 @@ import java.util.Optional;
 import org.jboss.logging.Logger;
 
 import ch.hftm.control.dto.BlogDto.NewBlogDto;
+import ch.hftm.control.dto.CommentDto.NewBlogCommentDto;
+import ch.hftm.control.mapper.BlogCommentMapper;
 import ch.hftm.control.mapper.BlogMapper;
 import ch.hftm.entity.Blog;
+import ch.hftm.entity.BlogComment;
 import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -63,8 +66,20 @@ public class BlogService {
 
     @Transactional
     public long addBlogDto(NewBlogDto blogDto) {
-        logger.info("Adding blog " + blogDto.title());
+        logger.info("Adding blog " + blogDto.getTitle());
         Blog blog = new BlogMapper().toValidBlog(blogDto);
+        blogRepository.persist(blog);
+        return blog.getId();
+    }
+
+    @Transactional
+    public long addBlogCommentDto(NewBlogCommentDto blogCommentDto, long id) {
+        logger.info(id);
+        logger.info("Adding blog comment " + blogCommentDto.comment());
+        Blog blog = getBlog(id).orElseThrow();
+        BlogComment comment = new BlogCommentMapper().toValidBlogComment(blogCommentDto);
+        blog.addComment(comment);
+        logger.info(comment.getId());
         blogRepository.persist(blog);
         return blog.getId();
     }

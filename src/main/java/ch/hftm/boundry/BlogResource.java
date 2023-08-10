@@ -10,9 +10,11 @@ import org.jboss.logging.Logger;
 
 import ch.hftm.control.BlogService;
 import ch.hftm.control.dto.BlogDto.NewBlogDto;
+import ch.hftm.control.dto.CommentDto.NewBlogCommentDto;
 import ch.hftm.entity.Blog;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.NotFoundException;
@@ -53,9 +55,10 @@ public class BlogResource {
     @Operation(description = "Add new Blog-Post.")
     @APIResponses({
             @APIResponse(responseCode = "500", description = "Could not create Blog"),
-            @APIResponse(responseCode = "201", description = "Blog created")
+            @APIResponse(responseCode = "201", description = "Blog created"),
+            @APIResponse(responseCode = "400", description = "Invalid input")
     })
-    public Response addBlog(NewBlogDto blogDto, @Context UriInfo uriInfo) {
+    public Response addBlog(@Valid NewBlogDto blogDto, @Context UriInfo uriInfo) {
         long id = this.blogService.addBlogDto(blogDto);
         var uri = uriInfo.getAbsolutePathBuilder().path(Long.toString(id)).build();
         return Response.created(uri).build();
@@ -97,5 +100,20 @@ public class BlogResource {
 
         var uri = uriInfo.getAbsolutePathBuilder().path(blog.getId().toString()).build();
         return Response.created(uri).entity(blog).build();
+    }
+
+    @POST
+    @Path("{id}/comments")
+    @Tag(name = BLOG_DETAIL)
+    @Operation(description = "ID from Blog.")
+    @APIResponses({
+        @APIResponse(responseCode = "500", description = "Could not create Comment"),
+        @APIResponse(responseCode = "201", description = "Comment created"),
+        @APIResponse(responseCode = "400", description = "Invalid input")
+})
+    public Response addComment(long id,@Valid NewBlogCommentDto blogCommentDto, @Context UriInfo uriInfo) {
+        long n_id = this.blogService.addBlogCommentDto(blogCommentDto, id);
+        var uri = uriInfo.getAbsolutePathBuilder().path(Long.toString(n_id)).build();
+        return Response.created(uri).build();
     }
 }

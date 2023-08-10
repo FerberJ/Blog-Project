@@ -33,4 +33,8 @@ public class Blog  {
         this.content = content;
         this.likedByMe = likedByMe;
     }
+
+    public void addComment(BlogComment comment) {
+        comments.add(comment);
+    }
  }
