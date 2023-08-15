@@ -127,3 +127,21 @@ public interface BlogDto {
     }
 }
 ``````
+--- 
+
+
+
+
+# Berechtigungskonzept
+
+| | **Admin** |**User w/ Account** | **User w/o Account**  |
+| --- | ------ | --- | --- |
+|GET blogs|x | x| x|
+|POST blogs | x | x|- |
+| GET blogs/id | x| x|x |
+| DELETE blogs (Selber erstellt) | x| x| -|
+| DELETE blogs (von anderen erstellt) | x| -| -|
+| POST comments | x| x|- |
+| PUT likedbyme |x | x| -|
+
+
