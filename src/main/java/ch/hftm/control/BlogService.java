@@ -41,11 +41,13 @@ public class BlogService {
         return blog;
     } 
 
+    
     @Transactional
     public void addBlog(Blog blog) {
         logger.info("Adding blog " + blog.getTitle());
         blogRepository.persist(blog);
     }
+    
 
     @Transactional
     public void removeBlog(Blog blog) {
@@ -65,9 +67,9 @@ public class BlogService {
     }
 
     @Transactional
-    public long addBlogDto(NewBlogDto blogDto) {
+    public long addBlogDto(NewBlogDto blogDto, String author) {
         logger.info("Adding blog " + blogDto.getTitle());
-        Blog blog = new BlogMapper().toValidBlog(blogDto);
+        Blog blog = new BlogMapper().toValidBlog(blogDto, author);
         blogRepository.persist(blog);
         return blog.getId();
     }

@@ -6,7 +6,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
 public class BlogMapper {
-    public Blog toValidBlog(NewBlogDto blogDto) {
-        return new Blog(blogDto.getTitle(), blogDto.getContent(), false);
+    public Blog toValidBlog(NewBlogDto blogDto, String author) {
+        return new Blog(blogDto.getTitle(), blogDto.getContent(), false, author);
     }
 }
