@@ -145,3 +145,63 @@ public interface BlogDto {
 | PUT likedbyme |x | x| -|
 
 
+## Testing
+
+Erstellen der Benutzer für das Auth-Setup:
+| Name | Rolle |
+| ---|--- |
+| alice | admin, user |
+| bob | user |
+|steve | user |
+
+In der Datei BlogSystemTest.class, werden alle Varianten der Tabelle **Berechtigungskonzept** getestet. Ausser:
+`DELETE blogs (Selber erstellt)` von User `User w/o Account`, da dieser keinen eigenen Blog erstellen kann.
+
+Es wird immer der Statuscode in der Response getestet:
+z.B.:
+```java
+@Test
+@Order(1)
+public void adminGet() {
+    RestAssured.given().auth().oauth2(getAccessToken(ADMIN))
+            .when().get("/blogs")
+            .then()
+            // Man möchte den Status-Code 200 erhalten
+            .statusCode(200); 
+```
+**Tabelle mit den gewünschten Status-Code:**
+| | **Admin** |**User w/ Account** | **User w/o Account**  |
+| --- | ------ | --- | --- |
+|GET blogs|200 | 200| 200|
+|POST blogs | 201 | 201|401 |
+| GET blogs/id | 200| 200|200|
+| DELETE blogs (Selber erstellt) | 204| 204| -|
+| DELETE blogs (von anderen erstellt) | 204| 403| 401|
+| POST comments | 201| 201|401 |
+| PUT likedbyme |201| 201| 401|
+
+Die Tests wurden erfolgreich ausgeführt. Man musste einfach darauf achten, das immer ein Blog erstellt wird und dessen Id bekannt ist zum testen.
+
+Dafür wurde die Methode `createBlog` erstellt. Die erstellt einen Blog und gibt die `id` zurück.
+```java
+    private String createBlog(String username) {
+        RestAssured.given().auth().oauth2(getAccessToken(username))
+                .contentType(ContentType.JSON)
+                .body(jsonPayloadBlog)
+                .when().post("/blogs");
+
+        String response = RestAssured.given()
+                .when()
+                .auth()
+                .oauth2(getAccessToken(username))
+                .get("/blogs")
+                .then()
+                .statusCode(200)
+                .contentType(ContentType.JSON)
+                .extract()
+                .response()
+                .asString();
+
+        return JsonPath.from(response).getString("id[-1]");
+    }
+```

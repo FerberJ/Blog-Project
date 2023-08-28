@@ -23,6 +23,7 @@ public class Blog  {
     @NotBlank @Size(min = 3, max = 50, message = "Title must be between 3 and 50 characters long.")
     private String title;
     private String content;
+    private String author;
     private boolean likedByMe;
 
     @OneToMany(cascade = CascadeType.ALL)
@@ -32,6 +33,13 @@ public class Blog  {
         this.title = title;
         this.content = content;
         this.likedByMe = likedByMe;
+    }
+
+    public Blog(String title, String content, boolean likedByMe, String author) {
+        this.title = title;
+        this.content = content;
+        this.likedByMe = likedByMe;
+        this.author = author;
     }
 
     public void addComment(BlogComment comment) {
