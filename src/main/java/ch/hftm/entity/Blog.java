@@ -13,8 +13,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+
 @Getter
-@Setter
+
 @NoArgsConstructor
 @Entity
 public class Blog  {
@@ -29,11 +30,13 @@ public class Blog  {
     @OneToMany(cascade = CascadeType.ALL)
     private List<BlogComment> comments;
 
+    /*
     public Blog(String title, String content, boolean likedByMe) {
         this.title = title;
         this.content = content;
         this.likedByMe = likedByMe;
     }
+    */
 
     public Blog(String title, String content, boolean likedByMe, String author) {
         this.title = title;
