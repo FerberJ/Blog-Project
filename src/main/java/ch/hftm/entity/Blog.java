@@ -45,4 +45,12 @@ public class Blog  {
     public void addComment(BlogComment comment) {
         comments.add(comment);
     }
+
+    /*
+    public void setComments(List<BlogComment> comments) {
+        this.comments = comments;
+    }
+    */
+
+    
  }
