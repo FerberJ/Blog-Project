@@ -41,12 +41,12 @@ public class BlogService {
         return blog;
     } 
 
-    
+    /*
     @Transactional
     public void addBlog(Blog blog) {
         logger.info("Adding blog " + blog.getTitle());
         blogRepository.persist(blog);
-    }
+    }*/
     
 
     @Transactional
@@ -61,10 +61,12 @@ public class BlogService {
         blogRepository.update("likedByMe = ?1 where id = ?2", !blog.isLikedByMe(), blog.getId());
     }
 
+    /*
     public Blog updateBlog(Blog blogToUpdate) {
         logger.info("Updating blog " + blogToUpdate.getTitle());
         return blogRepository.getEntityManager().merge(blogToUpdate);
     }
+    */
 
     @Transactional
     public long addBlogDto(NewBlogDto blogDto, String author) {
