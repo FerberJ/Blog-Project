@@ -205,3 +205,6 @@ Dafür wurde die Methode `createBlog` erstellt. Die erstellt einen Blog und gibt
         return JsonPath.from(response).getString("id[-1]");
     }
 ```
+
+
+http -v --form --auth backend-service:lNk4VGNcETrojTIgpoWhTX3qbkgFWWnn  POST http://keycloak:8180/realms/blog/protocol/openid-connect/token username=alice password=1234 grant_type=password
