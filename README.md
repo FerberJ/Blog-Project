@@ -206,5 +206,10 @@ Dafür wurde die Methode `createBlog` erstellt. Die erstellt einen Blog und gibt
     }
 ```
 
+create network
+
+database
+docker run --name blog-mysql -p 3306:3306 --network blog-nw -e MYSQL_ROOT_PASSWORD=vs4tw -e MYSQL_USER=dbuser -e MYSQL_PASSWORD=dbuser -e MYSQL_DATABASE=blogdb -d mysql:8.0
+
 
 http -v --form --auth backend-service:lNk4VGNcETrojTIgpoWhTX3qbkgFWWnn  POST http://keycloak:8180/realms/blog/protocol/openid-connect/token username=alice password=1234 grant_type=password
