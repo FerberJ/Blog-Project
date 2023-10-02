@@ -6,12 +6,12 @@ import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
-import org.jboss.logging.Logger;
 
 import ch.hftm.control.BlogService;
 import ch.hftm.control.dto.BlogDto.NewBlogDto;
 import ch.hftm.control.dto.CommentDto.NewBlogCommentDto;
 import ch.hftm.entity.Blog;
+import io.quarkus.logging.Log;
 import io.quarkus.security.Authenticated;
 import io.quarkus.security.ForbiddenException;
 import io.quarkus.security.identity.SecurityIdentity;
@@ -44,17 +44,19 @@ public class BlogResource {
     BlogService blogService;
 
     @Inject
-    Logger logger;
-
-    @Inject
     SecurityIdentity securityIdentity;
 
     @GET
     @Tag(name = BLOG_OVERVIEW)
     @PermitAll
     public List<Blog> getEntries(@QueryParam("search") String searchString) {
-        if (searchString != null && !searchString.isBlank())
+        Log.info("starting: get Blogs");
+
+        if (searchString != null && !searchString.isBlank()) {
+            Log.info("returning Blogs with searchstring: " + searchString);
             return this.blogService.getBlogs(searchString);
+        }
+        Log.info("returning all Blogs\tStatus: " + 200);
         return this.blogService.getBlogs();
     }
 
@@ -68,9 +70,23 @@ public class BlogResource {
     })
     @Authenticated
     public Response addBlog(@Valid NewBlogDto blogDto, @Context UriInfo uriInfo) {
+        Log.info("starting: post new Blog " + blogDto.getTitle());
         long id = this.blogService.addBlogDto(blogDto, securityIdentity.getPrincipal().getName());
         var uri = uriInfo.getAbsolutePathBuilder().path(Long.toString(id)).build();
-        return Response.created(uri).build();
+        Response response = Response.created(uri).build();
+        switch (response.getStatus()) {
+            case 500:
+                Log.error("Could not create Blog\tStatus: " + response.getStatus());
+                break;
+            case 400:
+                Log.error("Invalid input\tStatus: " + response.getStatus());
+            case 201:
+                Log.info("Blog created\tStatus: " + response.getStatus());
+            default:
+                break;
+        }
+
+        return response;
     }
 
     @GET
@@ -81,8 +97,16 @@ public class BlogResource {
     })
     @PermitAll
     public Blog getBlog(long id) {
-        return this.blogService.getBlog(id)
-                .orElseThrow(() -> new NotFoundException("Blog with id " + id + " not found"));
+        Log.info("starting: get Blog " + id);
+        try {
+            Blog blog = this.blogService.getBlog(id)
+                    .orElseThrow(() -> new NotFoundException("Blog with id " + id + " not found"));
+            Log.info("Blog found");
+            return blog;
+        } catch (Exception e) {
+            Log.error("Blog not found\tStatus: " + 400);
+            return null;
+        }
     }
 
     @DELETE
@@ -93,21 +117,22 @@ public class BlogResource {
     })
     @Authenticated
     public void deleteBlog(long id) {
-        Blog blog = this.blogService.getBlog(id)
-            .orElseThrow(() -> new NotFoundException("Blog with id " + id + " not found"));
+        Log.info("starting: delete Blog " + id);
+        try {
+            Blog blog = this.blogService.getBlog(id)
+                    .orElseThrow(() -> new NotFoundException("Blog not found\tStatus: " + 404));
 
-        if(
-            securityIdentity.getRoles().contains("admin") ||
-            blog.getAuthor().equals(securityIdentity.getPrincipal().getName())
-            ) {
-            this.blogService.removeBlog(blog);
+            if (securityIdentity.getRoles().contains("admin") ||
+                    blog.getAuthor().equals(securityIdentity.getPrincipal().getName())) {
+                this.blogService.removeBlog(blog);
+            } else {
+                throw new ForbiddenException("No access to Blog\tStatus: " + 403);
+            }
+        } catch (Exception e) {
+            Log.error(e.getMessage());
+            throw e;
         }
-        else {
-            throw new ForbiddenException();
-        }
 
-
-        
     }
 
     @PUT
@@ -118,12 +143,25 @@ public class BlogResource {
     })
     @Authenticated
     public Response updateLikedByMe(long id, @Context UriInfo uriInfo) {
+        Log.info("starting: updating likeByMe in Blog " + id);
         Blog blog = this.blogService.getBlog(id)
                 .orElseThrow(() -> new NotFoundException("Blog with id " + id + " not found"));
         this.blogService.updateLikedByMe(blog);
 
         var uri = uriInfo.getAbsolutePathBuilder().path(blog.getId().toString()).build();
-        return Response.created(uri).entity(blog).build();
+        Response response = Response.created(uri).entity(blog).build();
+
+        switch (response.getStatus()) {
+            case 404:
+                Log.error("Blog not found\tStatus: " + response.getStatus());
+                break;
+            case 201:
+                Log.info("Blog updated\tStatus: " + response.getStatus());
+            default:
+                break;
+        }
+
+        return response;
     }
 
     @POST
@@ -139,6 +177,22 @@ public class BlogResource {
     public Response addComment(long id, @Valid NewBlogCommentDto blogCommentDto, @Context UriInfo uriInfo) {
         long n_id = this.blogService.addBlogCommentDto(blogCommentDto, id);
         var uri = uriInfo.getAbsolutePathBuilder().path(Long.toString(n_id)).build();
-        return Response.created(uri).build();
+        Response response = Response.created(uri).build();
+
+        switch (response.getStatus()) {
+            case 500:
+                Log.error("Could not create Comment\tStatus: " + response.getStatus());
+                break;
+            case 400:
+                Log.error("Invalid input\tStatus: " + response.getStatus());
+                break;
+            case 201:
+                Log.info("Comment created\tStatus: " + response.getStatus());
+                break;
+            default:
+                break;
+        }
+
+        return response;
     }
 }
