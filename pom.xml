@@ -13,7 +13,7 @@
     <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
     <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
     <quarkus.platform.version>3.2.3.Final</quarkus.platform.version>
-    <skipITs>true</skipITs>
+    <skipITs>false</skipITs>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     <sonar.organization>ferberj</sonar.organization>
     <surefire-plugin.version>3.0.0</surefire-plugin.version>
@@ -32,9 +32,21 @@
   <dependencies>
     <dependency>
       <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-flyway</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.flywaydb</groupId>
+      <artifactId>flyway-mysql</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-container-image-docker</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
       <artifactId>quarkus-jacoco</artifactId>
       <scope>test</scope>
-</dependency>
+    </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-jdbc-mysql</artifactId>
@@ -60,7 +72,7 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-test-keycloak-server</artifactId>
       <scope>test</scope>
-  </dependency>
+    </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-resteasy-reactive</artifactId>
