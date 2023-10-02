@@ -206,10 +206,54 @@ Dafür wurde die Methode `createBlog` erstellt. Die erstellt einen Blog und gibt
     }
 ```
 
-create network
+# Docker
 
-database
+## Image erstellen
+```shell
+mvn verify
+```
+Es wird das Image `ghcr.io/ferberj/blog-backend` erstellt.
+
+## Docker aufsetzen
+
+Starte ein neues Netzwerk:
+```shell
+docker network create blog-nw 
+```
+
+Starte die mySQL-Datenbank:
+```shell
 docker run --name blog-mysql -p 3306:3306 --network blog-nw -e MYSQL_ROOT_PASSWORD=vs4tw -e MYSQL_USER=dbuser -e MYSQL_PASSWORD=dbuser -e MYSQL_DATABASE=blogdb -d mysql:8.0
+```
+
+Starte Keycloak mit den gewünschten Einstellungen
+```shell
+docker run --name keycloak3 --network blog-nw -v $(pwd)/src/main/docker/keycloak/blog-realm.json:/opt/keycloak/data/import/realm.json -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin -e KC_HTTP_PORT=8180 -e KC_HOSTNAME_URL=http://keycloak:8180 -p 8180:8180 -d quay.io/keycloak/keycloak:22.0.1 start-dev --import-realm
+```
+
+Starte nun den Quarkus Container
+```shell
+docker run --network blog-nw -i --rm -p 8080:8080 ghcr.io/ferberj/blog-backend
+```
+
+### Swagger
+Es kann nun im Brower `http://localhost:8080/q/swagger-ui/` die Verbindung getestet werden.
+
+Dafür benötigt man noch den access token. Dafür kann man entwender den von `Alice` oder von `Bob` nehmen. `Alice` ist Admin, `Bob` nicht
+
+Denn Access Token holt man sich mit httpie.
+
+**Alice**
+```shell
+http -v --form --auth backend-service:lNk4VGNcETrojTIgpoWhTX3qbkgFWWnn  POST http://keycloak:8180/realms/blog/protocol/openid-connect/token username=alice password=alice grant_type=password
+```
+**Bob**
+```shell
+http -v --form --auth backend-service:lNk4VGNcETrojTIgpoWhTX3qbkgFWWnn  POST http://keycloak:8180/realms/blog/protocol/openid-connect/token username=bob password=bob grant_type=password
+```
+
+Mit dem access token kann man bei Authorize hinein kopieren
+![Alt text](image.png)
+![Alt text](image-1.png)
 
 
-http -v --form --auth backend-service:lNk4VGNcETrojTIgpoWhTX3qbkgFWWnn  POST http://keycloak:8180/realms/blog/protocol/openid-connect/token username=alice password=1234 grant_type=password
