@@ -228,7 +228,7 @@ docker run --name blog-mysql -p 3306:3306 --network blog-nw -e MYSQL_ROOT_PASSWO
 
 Starte Keycloak mit den gewünschten Einstellungen
 ```shell
-docker run --name keycloak3 --network blog-nw -v $(pwd)/src/main/docker/keycloak/blog-realm.json:/opt/keycloak/data/import/realm.json -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin -e KC_HTTP_PORT=8180 -e KC_HOSTNAME_URL=http://keycloak:8180 -p 8180:8180 -d quay.io/keycloak/keycloak:22.0.1 start-dev --import-realm
+docker run --name keycloak --network blog-nw -v $(pwd)/src/main/docker/keycloak/blog-realm.json:/opt/keycloak/data/import/realm.json -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin -e KC_HTTP_PORT=8180 -e KC_HOSTNAME_URL=http://keycloak:8180 -p 8180:8180 -d quay.io/keycloak/keycloak:22.0.1 start-dev --import-realm
 ```
 
 Starte nun den Quarkus Container
