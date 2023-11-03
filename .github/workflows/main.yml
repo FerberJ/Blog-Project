@@ -30,7 +30,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: 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
+          password: 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
 
       # Build and Push Native Image over Maven-Wrapper
       - name: Build with Maven
