@@ -36,7 +36,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=FerberJ_Blog-Project
+      run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=FerberJ_Blog-Project --platform=linux/amd64
     # Als dritter Schritt führen wir den Maven-Build durch
     - name: Build with Maven, Run Tests, Package and Integration-Tests
       run: mvn verify
