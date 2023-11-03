@@ -7,6 +7,8 @@ Navigate into the folder `blog-backend` and give the following command:
 ./mvnw quarkus:dev
 ```
 
+For more information see documentation [here](blog-backend/README.md)
+
 ## Testing
 
 There are two options to run the unit test.
