@@ -7,7 +7,6 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
-
 import ch.hftm.control.BlogService;
 import ch.hftm.control.dto.BlogDto.NewBlogDto;
 import ch.hftm.control.dto.CommentDto.NewBlogCommentDto;
@@ -69,7 +68,7 @@ public class BlogResource {
             @APIResponse(responseCode = "201", description = "Blog created"),
             @APIResponse(responseCode = "400", description = "Invalid input")
     })
-    @Authenticated
+    @PermitAll
     public Response addBlog(@Valid NewBlogDto blogDto, @Context UriInfo uriInfo) {
         Log.info("starting: post new Blog " + blogDto.getTitle());
         long id = this.blogService.addBlogDto(blogDto, securityIdentity.getPrincipal().getName());
@@ -116,19 +115,15 @@ public class BlogResource {
     @APIResponses({ @APIResponse(responseCode = "404", description = "Blog not found"),
             @APIResponse(responseCode = "204", description = "Blog deleted")
     })
-    @Authenticated
+    @PermitAll
     public void deleteBlog(long id) {
         Log.info("starting: delete Blog " + id);
         try {
             Blog blog = this.blogService.getBlog(id)
                     .orElseThrow(() -> new NotFoundException("Blog not found\tStatus: " + 404));
 
-            if (securityIdentity.getRoles().contains("admin") ||
-                    blog.getAuthor().equals(securityIdentity.getPrincipal().getName())) {
-                this.blogService.removeBlog(blog);
-            } else {
-                throw new ForbiddenException("No access to Blog\tStatus: " + 403);
-            }
+            this.blogService.removeBlog(blog);
+
         } catch (Exception e) {
             Log.error(e.getMessage());
             throw e;
@@ -142,7 +137,7 @@ public class BlogResource {
     @APIResponses({ @APIResponse(responseCode = "404", description = "Blog not found"),
             @APIResponse(responseCode = "201", description = "Blog updated")
     })
-    @Authenticated
+    @PermitAll
     public Response updateLikedByMe(long id, @Context UriInfo uriInfo) {
         Log.info("starting: updating likeByMe in Blog " + id);
         Blog blog = this.blogService.getBlog(id)
@@ -174,7 +169,7 @@ public class BlogResource {
             @APIResponse(responseCode = "201", description = "Comment created"),
             @APIResponse(responseCode = "400", description = "Invalid input")
     })
-    @Authenticated
+    @PermitAll
     public Response addComment(long id, @Valid NewBlogCommentDto blogCommentDto, @Context UriInfo uriInfo) {
         long n_id = this.blogService.addBlogCommentDto(blogCommentDto, id);
         var uri = uriInfo.getAbsolutePathBuilder().path(Long.toString(n_id)).build();
